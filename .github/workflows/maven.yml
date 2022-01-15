@@ -25,10 +25,17 @@ jobs:
         
     - name: Build with Maven
       run: mvn clean -B package -s .maven/settings.xml
-
+      
+    - name: Upload Artifact      
+      run: mkdir staging && cp target/*.jar staging
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: staging 
+        
     - name: Deploy with Maven
       run: mvn -B deploy -DmuleDeploy -s .maven/settings.xml
-      
+    
       env:
           PLATFORM_USERNAME: ${{ secrets.PLATFORM_USERNAME }}
           PLATFORM_PASSWORD: ${{ secrets.PLATFORM_PASSWORD }}
